@@ -1,0 +1,75 @@
+-- Select all products with their categories
+SELECT products.name AS Product, categories.name AS Category, products.price
+FROM products
+JOIN categories ON products.category_id = categories.id;
+
+-- Description:
+-- This query retrieves all products along with their categories and prices.
+-- It uses an INNER JOIN between the 'products' and 'categories' tables based on the 'category_id' field, 
+-- which allows us to show the name of the category for each product.
+
+
+-- Find customers who placed orders over $100
+SELECT customers.name, customers.email, SUM(orders.total_amount) AS TotalSpent
+FROM customers
+JOIN orders ON customers.id = orders.customer_id
+GROUP BY customers.id
+HAVING TotalSpent > 100;
+
+-- Description:
+-- This query retrieves all customers who have spent more than $100 on orders.
+-- It joins the 'customers' and 'orders' tables using the 'customer_id' field.
+-- The SUM function is used to calculate the total spending per customer.
+-- The HAVING clause filters the customers whose total spending is over $100.
+
+
+-- Update the stock of a specific product
+UPDATE products
+SET stock_quantity = stock_quantity - 5
+WHERE name = 'Butterfly Timo Boll ALC';
+
+-- Description:
+-- This query decreases the stock quantity of the product 'Butterfly Timo Boll ALC' by 5 units.
+-- It uses the 'UPDATE' command to modify the 'stock_quantity' column in the 'products' table.
+-- The 'WHERE' clause ensures that only the specific product is updated.
+
+
+-- Insert a new order with items
+INSERT INTO orders (customer_id, total_amount)
+VALUES (1, 89.99);
+
+-- Description:
+-- This query inserts a new order into the 'orders' table for customer with ID 1.
+-- The 'total_amount' for this order is set to 89.99.
+-- It uses the 'INSERT INTO' statement to add a new record into the table.
+
+
+INSERT INTO order_items (order_id, product_id, quantity, price)
+VALUES (LAST_INSERT_ID(), 1, 1, 89.99);
+
+-- Description:
+-- This query inserts a new item into the 'order_items' table for the last inserted order.
+-- The 'LAST_INSERT_ID()' function gets the ID of the most recently inserted row in the 'orders' table.
+-- It assigns the 'product_id' as 1, with quantity 1, and price 89.99 for this specific order item.
+
+
+-- Delete an outdated product
+DELETE FROM products
+WHERE name = 'Old Paddle Model';
+
+-- Description:
+-- This query deletes a specific product from the 'products' table.
+-- The 'DELETE' command removes the record where the product's name matches 'Old Paddle Model'.
+-- It's used to remove outdated or discontinued products from the inventory.
+
+
+-- Count the number of products in each category
+SELECT categories.name AS Category, COUNT(products.id) AS NumberOfProducts
+FROM categories
+LEFT JOIN products ON categories.id = products.category_id
+GROUP BY categories.id;
+
+-- Description:
+-- This query retrieves the count of products available in each category.
+-- It uses a LEFT JOIN to include all categories, even those without products, and counts the number of products in each category.
+-- The 'GROUP BY' clause groups the results by category ID to get the count per category.
